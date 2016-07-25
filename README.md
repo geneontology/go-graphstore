@@ -81,6 +81,10 @@ The evidence model is the same regardless of whether simple or lego annotations 
 
 https://github.com/geneontology/minerva/blob/master/specs/owl-model.md
 
+## Functional Annotation: Molecular Entities
+
+See [Noctua Entity Ontology](https://github.com/geneontology/neo)
+
 ## Metadata
 
  * users

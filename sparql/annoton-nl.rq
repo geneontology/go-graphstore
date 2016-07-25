@@ -1,0 +1,5 @@
+SELECT * WHERE {
+  ?function enabled_by: ?enabler ;
+            occurs_in: ?location ;
+            part_of: ?process }
+

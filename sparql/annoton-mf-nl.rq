@@ -1,0 +1,7 @@
+SELECT * WHERE {
+  ?function enabled_by: ?enabler ;
+            a ?functionClass .
+  ?enabler a ?enablerClass
+}
+
+

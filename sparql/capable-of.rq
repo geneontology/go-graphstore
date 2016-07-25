@@ -1,0 +1,2 @@
+SELECT * WHERE
+{?enablerClass capable_of: ?functionClass}

@@ -1,0 +1,18 @@
+SELECT * WHERE {
+  ?function enabled_by: ?enabler ;
+            occurs_in: ?location ;
+            part_of: ?process .
+
+  ?location a ?locationClass .
+  ?locationClass rdfs:label ?locationClassLabel .
+
+  ?process a ?processClass .
+  ?processClass rdfs:label ?processClassLabel .
+
+  ?enabler a ?enablerClass .
+  ?enablerClass rdfs:label ?enablerClassLabel .
+
+  ?function a ?functionClass .
+  ?functionClass rdfs:label ?functionClassLabel
+}
+

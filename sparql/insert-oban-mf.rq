@@ -1,0 +1,7 @@
+INSERT
+    {?enablerClass capable_of: ?functionClass}
+WHERE {
+  ?function enabled_by: ?enabler ;
+            a ?functionClass .
+  ?enabler a ?enablerClass
+}

@@ -1,6 +1,10 @@
 
 all: all_lego
 
+## ----------------------------------------
+## GAFS
+## ----------------------------------------
+
 ## TODO: use config
 GAFS = fb sgd zfin mgi rgd pombase wormbase
 
@@ -11,6 +15,10 @@ gaf/%.gaf.gz:
 	mkdir -p gaf && wget http://geneontology.org/gene-associations/gene_association.$*.gz -O $@.tmp && mv $@.tmp $@ 
 .PRECIOUS: gaf/%.gaf.gz
 
+## ----------------------------------------
+## LEGO-RDF
+## ----------------------------------------
+
 ONT = rdf/go-lego-merged.owl
 rdf/%-lego.rdf: gaf/%.gaf.gz $(ONT) 
 	mkdir -p rdf && minerva-cli.sh $(ONT)  --gaf $< --gaf-lego-individuals --skip-merge -o $@.tmp && mv $@.tmp $@
@@ -19,7 +27,10 @@ $(ONT):
 	OWLTOOLS_MEMORY=12G owltools http://purl.obolibrary.org/obo/go/extensions/go-lego.owl --merge-imports-closure -o $@
 .PRECIOUS: ontology/go-lego-merged.owl
 
+## ----------------------------------------
 ## LOADING
+## ----------------------------------------
+
 BGJAR = jars/blazegraph.jar
 
 $(BGJAR):

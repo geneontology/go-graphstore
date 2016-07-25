@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/cmungall/go-graphstore.svg?branch=master)](https://travis-ci.org/cmungall/go-graphstore)
+[![DOI](https://zenodo.org/badge/13996/cmungall/go-graphstore.svg)](https://zenodo.org/badge/latestdoi/13996/cmungall/go-graphstore)
+
 This repository contains code and configuration for building the GO
 graphstore, as well as documentation on how to query it.
 

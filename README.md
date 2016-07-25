@@ -54,9 +54,9 @@ instance-level relationships over this.
 
 ## Functional Annotation: Simple
 
-TODO
+We use the OBAN association model. Simple triples with a reification like pattern.
 
-We use the OBAN association model
+TODO - document
 
 ## Functional Annotation: LEGO
 
@@ -81,8 +81,29 @@ The evidence model is the same regardless of whether simple or lego annotations 
 
 https://github.com/geneontology/minerva/blob/master/specs/owl-model.md
 
+## Metadata
+
+ * users
+ * GO REFs
+ * ...
+
 ## Transformations
+
+We can do a variety of transformations in SPARUL
+
+TODO: document reasoning strategy
+
+## Validation
+
+ * TODO: sparql-checks, SHACL, taxon constraints, ...
 
 ### Transforming lego to simple
 
  * [sparql/insert-oban-mf.rq](sparql/insert-oban-mf.rq)
+
+### Golr export
+
+TODO: We can eventually move the GO golr export to this framework
+(currently requires in-memory loading). One possibility is to take the
+RDF load into SciGraph and use the golr exporter there. Or we can
+explore use of SPARQL.

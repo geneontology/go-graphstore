@@ -6,7 +6,7 @@ all: all_lego
 ## ----------------------------------------
 
 ## TODO: use config
-GAFS = fb sgd zfin mgi rgd pombase wormbase
+GAFS = fb sgd zfin mgi rgd pombase wb
 
 all_lego: $(patsubst %, rdf/%-lego.rdf, $(GAFS))
 

@@ -4,7 +4,13 @@
 This repository contains code and configuration for building the GO
 graphstore, as well as documentation on how to query it.
 
-IN PROGRESS
+It is executed by this Jenkins job: https://build.berkeleybop.org/job/build-go-rdfstore
+
+This deposits the blazegraph dump here: http://build-artifacts.berkeleybop.org/build-go-rdfstore/latest/blazegraph.jnl
+
+Warning: this is experimental and the dump is not guaranteed to be
+either complete or up to date. To build the graph for yourself, follow
+the instructions below.
 
 # Building the graph store
 

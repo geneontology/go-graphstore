@@ -10,3 +10,4 @@ prefix has_part: <http://purl.obolibrary.org/obo/BFO_0000051>
 prefix enabled_by: <http://purl.obolibrary.org/obo/RO_0002333>
 prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 prefix capable_of: <http://purl.obolibrary.org/obo/RO_0002215>
+prefix GO: <http://purl.obolibrary.org/obo/GO_>

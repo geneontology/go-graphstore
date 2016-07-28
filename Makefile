@@ -27,8 +27,12 @@ $(ONT):
 	OWLTOOLS_MEMORY=12G owltools http://purl.obolibrary.org/obo/go/extensions/go-lego.owl --merge-imports-closure -o $@
 .PRECIOUS: ontology/go-lego-merged.owl
 
+## TODO: only include production models in production builds
+noctua-models:
+	git clone https://github.com/geneontology/noctua-models.git && cp noctua-models/models/* rdf/
+
 ## ----------------------------------------
-## LOADING
+## LOADING BLAZEGRAPH
 ## ----------------------------------------
 
 BGJAR = jars/blazegraph.jar
@@ -41,8 +45,20 @@ BG = java -XX:+UseG1GC -Xmx12G -cp $(BGJAR) com.bigdata.rdf.store.DataLoader -de
 load-blazegraph: $(BGJAR)
 	$(BG) rdf
 
+rmcat:
+	rm rdf/catalog-v001.xml
+
 rdf/%-bg-load: rdf/%.rdf
 	$(BG) $<
 
 bg-start:
 	java -server -Xmx8g -Dbigdata.propertyFile=conf/blazegraph.properties -jar $(BGJAR)
+
+## ----------------------------------------
+## SciGraph
+## ----------------------------------------
+
+# TODO: robust configuration
+SCIGRAPH= $(HOME)/repos/SciGraph/
+load-scigraph:
+	java -Xmx8G -classpath $(SCIGRAPH)/SciGraph-core/target/scigraph-core-1.5-SNAPSHOT-jar-with-dependencies.jar edu.sdsc.scigraph.owlapi.loader.BatchOwlLoader -c conf/scigraph-load-go.yaml 

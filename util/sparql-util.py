@@ -30,6 +30,8 @@ def run_query(q):
     print("ISUPDATE="+str(sparql.isSparqlUpdateRequest()))
     sparql.method = 'POST';  ## Required for SPARQL-UPDATE
     ret = sparql.query()
+    if sparql.isSparqlUpdateRequest() :
+        return
     print(ret.variables)  # this is an array consisting of "subj" and "prop"
     for binding in ret.bindings :
         # each binding is a dictionary. Let us just print the results

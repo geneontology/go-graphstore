@@ -8,7 +8,7 @@ all: all_lego
 ## TODO: use config
 GAFS = fb sgd zfin mgi rgd pombase wb
 
-all_lego: $(patsubst %, rdf/%-lego.rdf, $(GAFS))
+all_lego: $(patsubst %, rdf/%-lego.ttl, $(GAFS))
 
 # TODO: uniprot
 gaf/%.gaf.gz: 
@@ -20,8 +20,8 @@ gaf/%.gaf.gz:
 ## ----------------------------------------
 
 ONT = rdf/go-lego-merged.owl
-rdf/%-lego.rdf: gaf/%.gaf.gz $(ONT) 
-	mkdir -p rdf && minerva-cli.sh $(ONT)  --gaf $< --gaf-lego-individuals --skip-merge -o $@.tmp && mv $@.tmp $@
+rdf/%-lego.ttl: gaf/%.gaf.gz $(ONT) 
+	mkdir -p rdf && minerva-cli.sh $(ONT) --gaf $< --gaf-lego-individuals --skip-merge --format turtle -o $@.tmp && mv $@.tmp $@
 
 $(ONT): 
 	OWLTOOLS_MEMORY=12G owltools http://purl.obolibrary.org/obo/go/extensions/go-lego.owl --merge-imports-closure -o $@
@@ -62,3 +62,12 @@ bg-start:
 SCIGRAPH= $(HOME)/repos/SciGraph/
 load-scigraph:
 	java -Xmx8G -classpath $(SCIGRAPH)/SciGraph-core/target/scigraph-core-1.5-SNAPSHOT-jar-with-dependencies.jar edu.sdsc.scigraph.owlapi.loader.BatchOwlLoader -c conf/scigraph-load-go.yaml 
+
+## ----------------------------------------
+## RDFox
+## ----------------------------------------
+
+# See https://github.com/balhoff/rdfox-cli
+# RDFox can only read turtle data files; avoid loading the ontology as data.
+load-rdfox:
+	export JAVA_OPTS="-Xmx32G" && mkdir -p tmp && mv rdf/go-lego-merged.owl tmp/ && rdfox-cli --ontology=tmp/go-lego-merged.owl --data=rdf --store=rdfox.db --threads=24 --reason && mv tmp/go-lego-merged.owl rdf/

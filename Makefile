@@ -34,11 +34,11 @@ noctua-models:
 ## ----------------------------------------
 ## LOADING BLAZEGRAPH
 ## ----------------------------------------
-
-BGJAR = jars/blazegraph.jar
+BGVERSION = 2.1.4
+BGJAR = jars/blazegraph-jar-$(BGVERSION).jar
 
 $(BGJAR):
-	mkdir -p jars && cd jars && curl -O http://tenet.dl.sourceforge.net/project/bigdata/bigdata/2.1.1/blazegraph.jar
+	mkdir -p jars && mvn -DbgVersion=$(BGVERSION) package
 .PRECIOUS: $(BGJAR)
 
 BG = java -server -XX:+UseG1GC -Xmx12G -cp $(BGJAR) com.bigdata.rdf.store.DataLoader

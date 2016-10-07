@@ -41,15 +41,18 @@ $(BGJAR):
 	mkdir -p jars && cd jars && curl -O http://tenet.dl.sourceforge.net/project/bigdata/bigdata/2.1.1/blazegraph.jar
 .PRECIOUS: $(BGJAR)
 
-BG = java -XX:+UseG1GC -Xmx12G -cp $(BGJAR) com.bigdata.rdf.store.DataLoader -defaultGraph http://geneontology.org/rdf/ conf/blazegraph.properties
+BG = java -server -XX:+UseG1GC -Xmx12G -cp $(BGJAR) com.bigdata.rdf.store.DataLoader
 load-blazegraph: $(BGJAR)
-	$(BG) rdf
+	$(BG) -defaultGraph http://geneontology.org/rdf/ conf/blazegraph.properties rdf
+
+load-inferences: rdfox.ttl
+	$(BG) -defaultGraph http://geneontology.org/rdf/inferred/ conf/blazegraph.properties $<
 
 rmcat:
 	rm rdf/catalog-v001.xml
 
 rdf/%-bg-load: rdf/%.rdf
-	$(BG) $<
+	$(BG) -defaultGraph http://geneontology.org/rdf/ conf/blazegraph.properties $<
 
 bg-start:
 	java -server -Xmx8g -Dbigdata.propertyFile=conf/blazegraph.properties -jar $(BGJAR)
@@ -69,5 +72,5 @@ load-scigraph:
 
 # See https://github.com/balhoff/rdfox-cli
 # RDFox can only read turtle data files; avoid loading the ontology as data.
-load-rdfox:
-	export JAVA_OPTS="-Xmx32G" && mkdir -p tmp && mv rdf/go-lego-merged.owl tmp/ && rdfox-cli --ontology=tmp/go-lego-merged.owl --data=rdf --store=rdfox.db --threads=24 --reason && mv tmp/go-lego-merged.owl rdf/
+rdfox.ttl:
+	export JAVA_OPTS="-Xmx32G" && mkdir -p tmp && mv rdf/go-lego-merged.owl tmp/ && rdfox-cli --ontology=tmp/go-lego-merged.owl --data=rdf --threads=24 --reason --export=rdfox.ttl --inferred-only && mv tmp/go-lego-merged.owl rdf/

@@ -1,0 +1,12 @@
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX rgo: <http://rdf.geneontology.org/local#>
+
+# A non-owl prefix is used to avoid unnecessary execution of these rules on the actual data
+rgo:TransitiveProperty(rdfs:subClassOf) .
+rgo:TransitiveProperty(rdfs:subPropertyOf) .
+[?s, ?p, ?o2] :- rgo:TransitiveProperty(?p), [?s, ?p, ?o], [?o, ?p, ?o2], FILTER(isIRI(?s) && isIRI(?o2)) .
+
+
+#[?i, rgo:indirectType, ?d] :- [?i, rdf:type, ?c], [?c, rdfs:subClassOf, ?d] .
+#[?i, rgo:directType, ?c] :- [?i, rdf:type, ?c], not [?i, rgo:indirectType, ?c] .

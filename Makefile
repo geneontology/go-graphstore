@@ -19,13 +19,13 @@ gaf/%.gaf.gz:
 ## LEGO-RDF
 ## ----------------------------------------
 
-ONT = rdf/go-lego-merged.owl
+ONT = rdf/go-graphstore-merged.ttl
 rdf/%-lego.ttl: gaf/%.gaf.gz $(ONT) 
-	mkdir -p rdf && minerva-cli.sh $(ONT) --gaf $< --gaf-lego-individuals --skip-merge --format turtle -o $@.tmp && mv $@.tmp $@
+	mkdir -p rdf && MINERVA_CLI_MEMORY=32G minerva-cli.sh $(ONT) --gaf $< --gaf-lego-individuals --skip-merge --format turtle -o $@.tmp && mv $@.tmp $@
 
 $(ONT): 
-	OWLTOOLS_MEMORY=12G owltools http://purl.obolibrary.org/obo/go/extensions/go-lego.owl --merge-imports-closure -o $@
-.PRECIOUS: ontology/go-lego-merged.owl
+	OWLTOOLS_MEMORY=12G owltools go-graphstore.owl --merge-imports-closure -o -f turtle $@
+.PRECIOUS: rdf/go-graphstore-merged.ttl
 
 ## TODO: only include production models in production builds
 noctua-models:
@@ -41,7 +41,7 @@ $(BGJAR):
 	mkdir -p jars && mvn -DbgVersion=$(BGVERSION) package
 .PRECIOUS: $(BGJAR)
 
-BG = java -server -XX:+UseG1GC -Xmx12G -cp $(BGJAR) com.bigdata.rdf.store.DataLoader
+BG = java -server -XX:+UseG1GC -Xmx32G -cp $(BGJAR) com.bigdata.rdf.store.DataLoader
 load-blazegraph: $(BGJAR)
 	$(BG) -defaultGraph http://geneontology.org/rdf/ conf/blazegraph.properties rdf
 
@@ -73,4 +73,4 @@ load-scigraph:
 # See https://github.com/balhoff/rdfox-cli
 # RDFox can only read turtle data files; avoid loading the ontology as data.
 rdfox.ttl:
-	export JAVA_OPTS="-Xmx32G" && mkdir -p tmp && mv rdf/go-lego-merged.owl tmp/ && rdfox-cli --ontology=tmp/go-lego-merged.owl --data=rdf --threads=24 --reason --export=rdfox.ttl --inferred-only && mv tmp/go-lego-merged.owl rdf/
+	export JAVA_OPTS="-Xmx64G" && rdfox-cli --ontology=$(ONT) --rules=rules.dlog --data=rdf --threads=24 --reason --export=rdfox.ttl --inferred-only --excluded-properties=exclude.txt

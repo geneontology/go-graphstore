@@ -1,5 +1,5 @@
 
-all: all_lego
+all: all_lego noctua-models
 
 ## ----------------------------------------
 ## GAFS
@@ -24,12 +24,21 @@ rdf/%-lego.ttl: gaf/%.gaf.gz $(ONT)
 	mkdir -p rdf && MINERVA_CLI_MEMORY=32G minerva-cli.sh $(ONT) --gaf $< --gaf-lego-individuals --skip-merge --format turtle -o $@.tmp && mv $@.tmp $@
 
 $(ONT): 
-	OWLTOOLS_MEMORY=12G owltools go-graphstore.owl --merge-imports-closure -o -f turtle $@
+	mkdir -p rdf && OWLTOOLS_MEMORY=12G owltools go-graphstore.owl --merge-imports-closure -o -f turtle $@
 .PRECIOUS: rdf/go-graphstore-merged.ttl
 
 ## TODO: only include production models in production builds
 noctua-models:
 	git clone https://github.com/geneontology/noctua-models.git && cp noctua-models/models/* rdf/
+
+data-files = $(shell ls rdf | grep -v go-graphstore-merged.ttl)
+
+add-defined-by: all_lego noctua-models $(data-files)
+
+.PHONY: add-defined-by $(data-files)
+
+$(data-files):
+	arq --query=sparql/link-individual-to-model.rq --data=rdf/$@ --results=turtle >rdf/$(basename $@).definedby.ttl
 
 ## ----------------------------------------
 ## LOADING BLAZEGRAPH

@@ -11,6 +11,11 @@
             <artifactId>blazegraph-jar</artifactId>
             <version>${bgVersion}</version>
         </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-servlets</artifactId>
+            <version>9.2.3.v20140905</version>
+        </dependency>
     </dependencies>
     <build>
             <plugins>

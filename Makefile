@@ -80,6 +80,6 @@ load-scigraph:
 ## ----------------------------------------
 
 # See https://github.com/balhoff/rdfox-cli
-# RDFox can only read turtle data files; avoid loading the ontology as data.
+# RDFox can only read turtle data files.
 rdfox.ttl:
 	export JAVA_OPTS="-Xmx64G" && rdfox-cli --ontology=$(ONT) --rules=rules.dlog --data=rdf --threads=24 --reason --export=rdfox.ttl --inferred-only --excluded-properties=exclude.txt

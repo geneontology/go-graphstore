@@ -11,8 +11,8 @@ GAFS = fb sgd zfin mgi rgd pombase wb
 all_lego: $(patsubst %, rdf/%-lego.ttl, $(GAFS))
 
 # TODO: uniprot
-gaf/%.gaf.gz: 
-	mkdir -p gaf && wget http://geneontology.org/gene-associations/gene_association.$*.gz -O $@.tmp && mv $@.tmp $@ 
+gaf/%.gaf.gz:
+	mkdir -p gaf && wget http://geneontology.org/gene-associations/gene_association.$*.gz -O $@.tmp && mv $@.tmp $@
 .PRECIOUS: gaf/%.gaf.gz
 
 ## ----------------------------------------
@@ -20,10 +20,10 @@ gaf/%.gaf.gz:
 ## ----------------------------------------
 
 ONT = rdf/go-graphstore-merged.ttl
-rdf/%-lego.ttl: gaf/%.gaf.gz $(ONT) 
+rdf/%-lego.ttl: gaf/%.gaf.gz $(ONT)
 	mkdir -p rdf && MINERVA_CLI_MEMORY=32G minerva-cli.sh $(ONT) --gaf $< --gaf-lego-individuals --skip-merge --format turtle -o $@.tmp && mv $@.tmp $@
 
-$(ONT): 
+$(ONT):
 	mkdir -p rdf && OWLTOOLS_MEMORY=12G owltools go-graphstore.owl --merge-imports-closure -o -f turtle $@
 .PRECIOUS: rdf/go-graphstore-merged.ttl
 
@@ -43,14 +43,14 @@ $(data-files):
 ## ----------------------------------------
 ## LOADING BLAZEGRAPH
 ## ----------------------------------------
-BGVERSION = 2.1.4
-BGJAR = jars/blazegraph-jar-$(BGVERSION).jar
+BGJAR = jars/blazegraph-jar.jar
 
 $(BGJAR):
-	mkdir -p jars && mvn -DbgVersion=$(BGVERSION) package
+	mkdir -p jars && mvn package
 .PRECIOUS: $(BGJAR)
 
-BG = java -server -XX:+UseG1GC -Xmx32G -cp $(BGJAR) com.bigdata.rdf.store.DataLoader
+BGMEM ?= 32G
+BG = java -server -XX:+UseG1GC -Xmx$(BGMEM) -cp $(BGJAR) com.bigdata.rdf.store.DataLoader
 load-blazegraph: $(BGJAR)
 	$(BG) -defaultGraph http://geneontology.org/rdf/ conf/blazegraph.properties rdf
 
@@ -73,7 +73,7 @@ bg-start:
 # TODO: robust configuration
 SCIGRAPH= $(HOME)/repos/SciGraph/
 load-scigraph:
-	java -Xmx8G -classpath $(SCIGRAPH)/SciGraph-core/target/scigraph-core-1.5-SNAPSHOT-jar-with-dependencies.jar edu.sdsc.scigraph.owlapi.loader.BatchOwlLoader -c conf/scigraph-load-go.yaml 
+	java -Xmx8G -classpath $(SCIGRAPH)/SciGraph-core/target/scigraph-core-1.5-SNAPSHOT-jar-with-dependencies.jar edu.sdsc.scigraph.owlapi.loader.BatchOwlLoader -c conf/scigraph-load-go.yaml
 
 ## ----------------------------------------
 ## RDFox

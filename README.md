@@ -14,7 +14,21 @@ the instructions below.
 
 # Building the graph store
 
-See the [Makefile](Makefile) for details.
+See the [Makefile](Makefile) for details. You can build with:
+
+    make all
+    make load-blazegraph
+
+By default the load-blazegraph target starts blazegraph with 32 gigs of memory.
+For a local build, you can set an environment variable before running:
+
+    BGMEM=8G make load-blazegraph
+
+Where `8G` can be substituted for however much memory you want to allocate.
+
+To start blazegraph run (with the optional `BGMEM` variable):
+
+    make bg-start
 
 For now this must be constructed yourself but in future we will host
 the RDF, the `blazegraph.jnl` file, and provide a query endpoint.
@@ -32,7 +46,7 @@ After this various transformations take place (TODO)
 
  * [sparql/delete-NamedIndividual-ul.rq](sparql/delete-NamedIndividual-ul.rq) - clogs querying
  * [sparql/insert-oban-mf.rq](sparql/insert-oban-mf.rq) - adds derived simple representation
- * todo - bp, cc 
+ * todo - bp, cc
 
 # Querying the graph store
 
@@ -71,13 +85,13 @@ TODO - document
 
 ### Core Annoton
 
-The core unit is an annoton. It describes how any specific __molecular entity__ (e.g. a gene product or protein complex) 
+The core unit is an annoton. It describes how any specific __molecular entity__ (e.g. a gene product or protein complex)
 
     ?functionInstance a ?functionClass ;
                         occurs_in: ?locationInstance ;
                         part_of: ?processInstance ;
                         enabled_by: ?molecularInstance .
-    
+
     ?locationInstance a ?locationClass .
     ?processInstance a ?processClass .
     ?molecularInstance a ?molecularClass .

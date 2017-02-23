@@ -1,0 +1,9 @@
+rdf/
+noctua-models/
+jars/
+gaf/
+blazegraph.jnl
+*.log
+rdfox.ttl
+rules.log
+bin/

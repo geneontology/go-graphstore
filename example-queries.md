@@ -21,7 +21,7 @@
 	    ?descendants rdfs:subClassOf+ ?nucleus .  
 	}
 
-#### For all 'partOf' descendants of 'nucleus' (that is, all entities that ultimately are 'partOf' nucleus) that are not reasoned
+#### For all 'partOf' descendants of 'nucleus' (that is, all entities that ultimately are 'partOf' nucleus)
 
 	prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 	prefix part_of: <http://purl.obolibrary.org/obo/BFO_0000050_SOME>

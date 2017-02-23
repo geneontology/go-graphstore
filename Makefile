@@ -49,7 +49,8 @@ $(BGJAR):
 	mkdir -p jars && mvn package
 .PRECIOUS: $(BGJAR)
 
-BG = java -server -XX:+UseG1GC -Xmx32G -cp $(BGJAR) com.bigdata.rdf.store.DataLoader
+BGMEM ?= 32G
+BG = java -server -XX:+UseG1GC -Xmx$(BGMEM) -cp $(BGJAR) com.bigdata.rdf.store.DataLoader
 load-blazegraph: $(BGJAR)
 	$(BG) -defaultGraph http://geneontology.org/rdf/ conf/blazegraph.properties rdf
 

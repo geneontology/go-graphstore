@@ -6,3 +6,4 @@ blazegraph.jnl
 *.log
 rdfox.ttl
 rules.log
+bin/

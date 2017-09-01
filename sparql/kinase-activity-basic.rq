@@ -1,4 +1,4 @@
-PREFIX ka: <http://purl.obolibrary.org/obo/GO_0016301>
+PREFIX kinase_activity: <http://purl.obolibrary.org/obo/GO_0016301>
 PREFIX enables: <http://purl.obolibrary.org/obo/RO_0002327>
 PREFIX state: <http://geneontology.org/lego/modelstate> 
 
@@ -10,7 +10,7 @@ SELECT ?g ?g2 ?eC ?aC WHERE {
  }
  
  GRAPH ?g2 {
-  ?a a ka: .
+  ?a a kinase_activity: .
   ?e enables: ?a 
  }
  FILTER(!regex(str(?g),"_inferred"))

@@ -10,7 +10,7 @@ SELECT ?g ?g2 ?eC ?aC WHERE {
  }
  
  GRAPH ?g2 {
-  ?a a ?ka .
+  ?a a ka: .
   ?e enables: ?a 
  }
  FILTER(!regex(str(?g),"_inferred"))

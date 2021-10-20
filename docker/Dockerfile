@@ -1,11 +1,11 @@
-ARG minerva_base_image=openjdk:8-jre
+ARG graphstore_base_image=openjdk:8-jre
 
 FROM maven:3.6.3-openjdk-8 AS builder
 
 COPY ./pom.xml ./pom.xml
 RUN mvn package 
 
-FROM ${minerva_base_image}
+FROM ${graphstore_base_image}
 
 WORKDIR /app
 

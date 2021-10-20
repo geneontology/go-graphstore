@@ -11,7 +11,7 @@ services:
   apache_graphstore:
     hostname: apache_graphstore
     container_name: apache_graphstore
-    image: httpd:latest
+    image: httpd:2.4.51
     restart: unless-stopped
     volumes:
       - {{ stage_dir }}/httpd.conf:/usr/local/apache2/conf/httpd.conf

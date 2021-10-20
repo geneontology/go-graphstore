@@ -3,14 +3,29 @@
 # Point stage_dir to a different location. By default it will reside in the current directory.
 ##############
 stage_dir: "{{ lookup('env', 'PWD') }}/stage_dir"
-branch: master
-tag: latest
+
+######
+# repo, branch and destination
+######
 repo: https://github.com/geneontology/go-graphstore
+branch: master
 repo_dir: '{{ stage_dir }}/go-graphstore'
 
+######
+# go-graphstore docker image tag
+######
+tag: latest
+
+######
+# Used to access graphstore when stack is up http://graphstore.example.com/blazegraph
+# Make sure a dns entry and points to correct ip using nslookup or dig 
+######
 GRAPHSTORE_SERVER_NAME: graphstore.example.com
 
-# http://current.geneontology.org/products/blazegraph/blazegraph-internal.jnl.gz
-# http://current.geneontology.org/products/blazegraph/blazegraph-production.jnl.gz 
+#
+# Change journal location accordingly
+#
+
+#remote_journal_gzip: http://current.geneontology.org/products/blazegraph/blazegraph-production.jnl.gz  
 remote_journal_gzip: http://current.geneontology.org/products/blazegraph/blazegraph-internal.jnl.gz
 

@@ -28,6 +28,6 @@ RUN groupadd -g ${gid} gunicorn \
 
 COPY --chown=${uid}:${gid} --from=builder /jars/*.jar  ./jars/
 
-EXPOSE 8999 
+EXPOSE 8899 
 USER gunicorn
 CMD ["./run.sh"]

@@ -98,7 +98,9 @@ which docker-compose
 
 #### About Journal
 
-The journal is downloaded from url specified by the varianle `remote_journal_gzip`. see vars.yaml
+The journal is downloaded from url specified by the variavle `remote_journal_gzip`. see vars.yaml
+
+Note: The download is skipped if a journal is already in place.
 
 #### Stage To AWS Instance: 
 

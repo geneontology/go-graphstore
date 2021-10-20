@@ -23,8 +23,10 @@ Note: This variable can also be passed using the -e option.
 XXX.XXX.XXX.XXX graphstore.example.com
 ```
 
-#### About Solr Index
-TODO
+#### About Journal
+The journal is downloaded from url specified by the variavle `remote_journal_gzip`. see vars.yaml
+
+Note: The download is skipped if a journal is already in place.
 
 #### Stage Locally
 

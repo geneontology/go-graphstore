@@ -4,6 +4,8 @@ services:
     hostname: graphstore
     container_name: graphstore 
     image: go-graphstore:{{ tag }}
+    environment: 
+      - MEM={{ MEM }}
     volumes:
       - {{ stage_dir }}/blazegraph.jnl:/app/blazegraph.jnl
     restart: unless-stopped

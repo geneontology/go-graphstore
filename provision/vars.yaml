@@ -17,10 +17,16 @@ repo_dir: '{{ stage_dir }}/go-graphstore'
 tag: latest
 
 ######
+# java heap size
+######
+MEM: 3G
+
+######
 # Used to access graphstore when stack is up http://graphstore.example.com/blazegraph
 # Make sure a dns entry and points to correct ip using nslookup or dig 
 ######
 GRAPHSTORE_SERVER_NAME: graphstore.example.com
+GRAPHSTORE_SERVER_ALIAS: graphstore.example.com
 
 #
 # Change journal location accordingly

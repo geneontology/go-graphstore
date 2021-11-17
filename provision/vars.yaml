@@ -20,6 +20,7 @@ tag: latest
 # java heap size
 ######
 MEM: 3G
+QUERY_TIMEOUT: 30000
 
 ######
 # Used to access graphstore when stack is up http://graphstore.example.com/blazegraph

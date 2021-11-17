@@ -16,8 +16,10 @@
     when: not journal_result.stat.exists
 
   - name: Unpack the journal
-    shell: gunzip "/{{ stage_dir }}/blazegraph.jnl.gz"
+    shell: unpigz "/{{ stage_dir }}/blazegraph.jnl.gz" || gunzip "/{{ stage_dir }}/blazegraph.jnl.gz"
     when: not journal_result.stat.exists
+    args:
+      executable: /bin/bash
 
   - name: install docker-compose.yaml and http configs
     template:
@@ -27,3 +29,4 @@
       - { file: 'docker-compose.yaml', dir: '' }
       - { file: 'httpd.conf', dir: '' }
       - { file: 'httpd-vhosts-graphstore.conf', dir: '' }
+      - { file: 'readonly_cors.xml', dir: '' }

@@ -8,6 +8,7 @@ services:
       - MEM={{ MEM }}
     volumes:
       - {{ stage_dir }}/blazegraph.jnl:/app/blazegraph.jnl
+      - {{ stage_dir }}/readonly_cors.xml:/app/conf/readonly_cors.xml
     restart: unless-stopped
 
   apache_graphstore:

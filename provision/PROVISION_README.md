@@ -28,6 +28,12 @@ The journal is downloaded from url specified by the variavle `remote_journal_gzi
 
 Note: The download is skipped if a journal is already in place.
 
+#### LogRotate To AWS S3
+  - USE_S3: 1
+  - ACCESS_KEY: REPLACE_ME
+  - SECRET_KEY: REPLACE_ME
+  - S3_BUCKET: REPLACE_ME
+
 #### Stage Locally
 
 Clone the repo, build the docker image and finally copy all template files such as docker-compose.yaml 
@@ -80,3 +86,14 @@ docker exec -it graphstore /bin/bash
 // Proxy
 docker exec -it apache_graphstore /bin/bash
 ```
+
+Test LogRotate. Use -f option to force log rotation.
+
+```sh
+docker exec -it apache_graphstore bash
+ps -ef | grep crond
+ps -ef | grep apache2
+cat /opt/credentials/s3cfg
+logrotate -v -f /etc/logrotate.d/apache2
+```
+

@@ -1,0 +1,26 @@
+version: '3'
+services:
+  graphstore:
+    hostname: graphstore
+    container_name: graphstore 
+    image: go-graphstore:{{ tag }}
+    environment: 
+      - MEM={{ MEM }}
+    volumes:
+      - {{ stage_dir }}/blazegraph.jnl:/app/blazegraph.jnl
+      - {{ stage_dir }}/readonly_cors.xml:/app/conf/readonly_cors.xml
+    restart: unless-stopped
+
+  apache_graphstore:
+    hostname: apache_graphstore
+    container_name: apache_graphstore
+    image: httpd:2.4.51
+    restart: unless-stopped
+    volumes:
+      - {{ stage_dir }}/httpd.conf:/usr/local/apache2/conf/httpd.conf
+      - {{ stage_dir }}/httpd-vhosts-graphstore.conf:/usr/local/apache2/conf/extra/httpd-vhosts-graphstore.conf
+      - {{ stage_dir }}/apache_proxy_logs:/usr/local/apache2/logs
+    ports:
+      - "80:80"
+    depends_on:
+      - graphstore

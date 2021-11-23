@@ -7,3 +7,9 @@ blazegraph.jnl
 rdfox.ttl
 rules.log
 bin/
+
+stage_dir
+.terraform
+.terraform.lock.hcl
+terraform.tfstate
+terraform.tfstate.backup

@@ -1,0 +1,32 @@
+- hosts: all
+  vars_files:
+  - vars.yaml
+
+  tasks:
+  - name: Check if journal exists
+    stat:
+      path: '{{ stage_dir }}/blazegraph.jnl'
+    register: journal_result
+
+  - name: Get remote blazegraph
+    get_url:
+      url: "{{ remote_journal_gzip }}"
+      dest: "/{{ stage_dir }}/blazegraph.jnl.gz"
+      timeout: 1000
+    when: not journal_result.stat.exists
+
+  - name: Unpack the journal
+    shell: unpigz "/{{ stage_dir }}/blazegraph.jnl.gz" || gunzip "/{{ stage_dir }}/blazegraph.jnl.gz"
+    when: not journal_result.stat.exists
+    args:
+      executable: /bin/bash
+
+  - name: install docker-compose.yaml and http configs
+    template:
+      src: '{{ item.file }}'
+      dest: '{{ stage_dir }}/{{ item.dir }}'
+    with_items:
+      - { file: 'docker-compose.yaml', dir: '' }
+      - { file: 'httpd.conf', dir: '' }
+      - { file: 'httpd-vhosts-graphstore.conf', dir: '' }
+      - { file: 'readonly_cors.xml', dir: '' }

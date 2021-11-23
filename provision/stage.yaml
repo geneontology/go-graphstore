@@ -6,6 +6,8 @@
   - name: Check if journal exists
     stat:
       path: '{{ stage_dir }}/blazegraph.jnl'
+      get_checksum: False
+      get_md5: False
     register: journal_result
 
   - name: Get remote blazegraph
@@ -27,6 +29,7 @@
       dest: '{{ stage_dir }}/{{ item.dir }}'
     with_items:
       - { file: 'docker-compose.yaml', dir: '' }
-      - { file: 'httpd.conf', dir: '' }
       - { file: 'httpd-vhosts-graphstore.conf', dir: '' }
       - { file: 'readonly_cors.xml', dir: '' }
+      - { file: 'apache2', dir: '' }
+      - { file: 's3cfg', dir: '' }

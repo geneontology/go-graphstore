@@ -36,5 +36,4 @@
       - { file: 'docker-compose.yaml', dir: '/' }
       - { file: 'readonly_cors.xml', dir: '/' }
       - { file: 'httpd-vhosts-graphstore.conf', dir: '/proxy-configs' }
-      - { file: 'apache2', dir: '/proxy-configs' }
       - { file: 's3cfg', dir: '/proxy-configs' }

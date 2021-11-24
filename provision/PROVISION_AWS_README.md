@@ -159,7 +159,7 @@ Test LogRotate. Use -f option to force log rotation.
 
 ```sh
 docker exec -it apache_graphstore bash
-ps -ef | grep crond
+ps -ef | grep cron
 ps -ef | grep apache2
 cat /opt/credentials/s3cfg
 logrotate -v -f /etc/logrotate.d/apache2

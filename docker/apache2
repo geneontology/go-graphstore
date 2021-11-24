@@ -7,7 +7,7 @@
 	notifempty
 	create 640 root adm
 	postrotate
-                UPLOAD_CMD="s3cmd -c /opt/credentials/s3cfg --mime-type=text/plain put" NAME_PREFIX="" S3_PATH={{ S3_PATH }} /opt/bin/logrotate-to-s3.sh {{ S3_BUCKET }} "$@"
+                UPLOAD_CMD="s3cmd -c /opt/credentials/s3cfg --mime-type=text/plain put" NAME_PREFIX="" /opt/bin/logrotate-to-s3.sh "$@"
                 if invoke-rc.d apache2 status > /dev/null 2>&1; then \
                     invoke-rc.d apache2 reload > /dev/null 2>&1; \
                 fi;

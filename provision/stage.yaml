@@ -23,13 +23,18 @@
     args:
       executable: /bin/bash
 
-  - name: install docker-compose.yaml and http configs
+  - name: Create proxy-configs directory
+    file:
+      path: '{{ stage_dir }}/proxy-configs'
+      state: directory 
+
+  - name: install docker-compose, http configs, ...
     template:
-      src: '{{ item.file }}'
-      dest: '{{ stage_dir }}/{{ item.dir }}'
+      src: 'templates/{{ item.file }}'
+      dest: '{{ stage_dir }}{{ item.dir }}/{{ item.file }}'
     with_items:
-      - { file: 'docker-compose.yaml', dir: '' }
-      - { file: 'httpd-vhosts-graphstore.conf', dir: '' }
-      - { file: 'readonly_cors.xml', dir: '' }
-      - { file: 'apache2', dir: '' }
-      - { file: 's3cfg', dir: '' }
+      - { file: 'docker-compose.yaml', dir: '/' }
+      - { file: 'readonly_cors.xml', dir: '/' }
+      - { file: 'httpd-vhosts-graphstore.conf', dir: '/proxy-configs' }
+      - { file: 'apache2', dir: '/proxy-configs' }
+      - { file: 's3cfg', dir: '/proxy-configs' }

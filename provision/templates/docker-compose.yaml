@@ -19,10 +19,10 @@ services:
       - USE_S3={{ USE_S3 }}
     restart: unless-stopped
     volumes:
-      - {{ stage_dir }}/httpd-vhosts-graphstore.conf:/etc/apache2/sites-enabled/httpd-vhosts-graphstore.conf
+      - {{ stage_dir }}/proxy-configs/apache2:/etc/logrotate.d/apache2
+      - {{ stage_dir }}/proxy-configs/s3cfg:/opt/credentials/s3cfg
+      - {{ stage_dir }}/proxy-configs/httpd-vhosts-graphstore.conf:/etc/apache2/sites-enabled/httpd-vhosts-graphstore.conf
       - {{ stage_dir }}/apache_proxy_logs:/var/log/apache2
-      - {{ stage_dir }}/apache2:/etc/logrotate.d/apache2
-      - {{ stage_dir }}/s3cfg:/opt/credentials/s3cfg
     ports:
       - "80:80"
     depends_on:

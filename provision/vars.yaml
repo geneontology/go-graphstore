@@ -22,6 +22,15 @@ tag: latest
 MEM: 3G
 QUERY_TIMEOUT: 30000
 
+########
+# For logrotate to s3 bucket
+#######`
+USE_S3: 1
+S3_PATH: graphstore 
+ACCESS_KEY: REPLACE_ME
+SECRET_KEY: REPLACE_ME
+S3_BUCKET: REPLACE_ME
+
 ######
 # Used to access graphstore when stack is up http://graphstore.example.com/blazegraph
 # Make sure a dns entry and points to correct ip using nslookup or dig 

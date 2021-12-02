@@ -14,12 +14,16 @@ services:
   apache_graphstore:
     hostname: apache_graphstore
     container_name: apache_graphstore
-    image: httpd:2.4.51
+    image: go-apache:{{ tag }} 
+    environment:
+      - USE_S3={{ USE_S3 }}
+      - S3_PATH={{ S3_PATH }}
+      - S3_BUCKET={{ S3_BUCKET }}
     restart: unless-stopped
     volumes:
-      - {{ stage_dir }}/httpd.conf:/usr/local/apache2/conf/httpd.conf
-      - {{ stage_dir }}/httpd-vhosts-graphstore.conf:/usr/local/apache2/conf/extra/httpd-vhosts-graphstore.conf
-      - {{ stage_dir }}/apache_proxy_logs:/usr/local/apache2/logs
+      - {{ stage_dir }}/proxy-configs/s3cfg:/opt/credentials/s3cfg
+      - {{ stage_dir }}/proxy-configs/httpd-vhosts-graphstore.conf:/etc/apache2/sites-enabled/httpd-vhosts-graphstore.conf
+      - {{ stage_dir }}/apache_proxy_logs:/var/log/apache2
     ports:
       - "80:80"
     depends_on:

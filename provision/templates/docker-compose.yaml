@@ -1,9 +1,10 @@
-version: '3'
+version: '3.7'
 services:
   graphstore:
     hostname: graphstore
     container_name: graphstore 
     image: go-graphstore:{{ tag }}
+    init: true
     environment: 
       - MEM={{ MEM }}
     volumes:
@@ -15,6 +16,7 @@ services:
     hostname: apache_graphstore
     container_name: apache_graphstore
     image: go-apache:{{ tag }} 
+    init: true
     environment:
       - USE_S3={{ USE_S3 }}
       - S3_PATH={{ S3_PATH }}

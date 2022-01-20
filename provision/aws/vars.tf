@@ -7,9 +7,6 @@ variable "region" {
   default = "us-east-1"
 }
 
-variable eip_alloc_id {
-  default = "eipalloc-06ca9adfa0978aab9"
-}
 
 variable "instance_type" {
   default = "t2.large" 

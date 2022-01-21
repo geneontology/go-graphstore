@@ -32,19 +32,6 @@ variable "private_key_path" {
 
 ```
 
-#### Elastic Ip
-
-Create elastic ip (VPC) and use its allocation_id aws/vars.tf 
-
-Note: A default elastic ip has already been created for region us-east-1
-      It can be used if not associated to an instance. 
-
-```sh
-variable eip_alloc_id {
-  default = "REPLACE_ME"
-}
-```
-
 #### DNS 
 
 Need to create a Route53 record pointing to the elastic ip created above.

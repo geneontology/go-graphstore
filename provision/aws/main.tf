@@ -1,14 +1,3 @@
-// Search for eip by allocation_id
-// If found data.aws_eip.graphstore_eip.public_ip will be the public ip.
-data "aws_eip" "graphstore_eip" {
-  id = var.eip_alloc_id
-}
-
-resource "aws_eip_association" "eip_assoc" {
-  instance_id   = aws_instance.graphstore_server.id
-  allocation_id = data.aws_eip.graphstore_eip.id
-}
-
 resource "aws_instance" "graphstore_server" {
   ami                    = var.ami
   instance_type          = var.instance_type
@@ -30,4 +19,14 @@ resource "aws_instance" "graphstore_server" {
       tags,
     ]
   }
+}
+
+resource "aws_eip" "graphstore_eip" {
+  vpc  = true
+  tags = var.tags
+}
+
+resource "aws_eip_association" "eip_assoc" {
+  instance_id   = aws_instance.graphstore_server.id
+  allocation_id = aws_eip.graphstore_eip.id
 }

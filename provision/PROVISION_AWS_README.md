@@ -26,19 +26,16 @@ variable "public_key_path" {
   default = "~/.ssh/id_rsa.pub"
 }
 
-variable "private_key_path" {
-  default = "~/.ssh/id_rsa"
-}
 
 ```
 
 #### DNS 
 
-Need to create a Route53 record pointing to the elastic ip created above.
-The hostname specified by this record will be used by the apache proxy 
+Need to create Route53 records pointing to the elastic ip created above.
+The hostnames specified by these records will be used by the apache proxy 
 to forward traffic to the graphstore container.
 
-Replace variable GRAPHSTORE_SERVER_NAME with the hostnames accordingly in vars.yaml.
+Replace variables GRAPHSTORE_SERVER_NAME and RAPHSTORE_SERVER_ALIAS in vars.yaml.
 
 Note: Ansible variables can also be passed using the -e option. 
 
@@ -76,7 +73,7 @@ terraform -chdir=aws show
 
 ```sh
 export HOST=`terraform -chdir=aws output -raw public_ip`
-export PRIVATE_KEY=`terraform -chdir=aws output -raw private_key_path`
+export PRIVATE_KEY="~/.ssh/id_rsa"
 
 ssh -o StrictHostKeyChecking=no -i $PRIVATE_KEY ubuntu@$HOST
 docker ps
@@ -109,7 +106,7 @@ and other templates.
 ```sh
 cd provision
 export HOST=`terraform -chdir=aws output -raw public_ip`
-export PRIVATE_KEY=`terraform -chdir=aws output -raw private_key_path`
+export PRIVATE_KEY="~/.ssh/id_rsa"
 
 // Make sure this is an abosulte path.
 export STAGE_DIR=/home/ubuntu/stage_dir

@@ -1,0 +1,15 @@
+#####
+# Bucket to store apache logs.
+####
+S3_BUCKET=REPLACE_ME
+
+######
+# Used to access graphstore when stack is up http://graphstore.example.com/blazegraph
+# Make sure a dns entry and points to correct ip using nslookup or dig 
+######
+GRAPHSTORE_SERVER_NAME=REPLACE_ME
+GRAPHSTORE_SERVER_ALIAS=REPLACE_ME
+
+#
+#
+remote_journal_gzip=http://current.geneontology.org/products/blazegraph/blazegraph-internal.jnl.gz

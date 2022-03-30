@@ -26,6 +26,17 @@ You need the following before you begin:
 - Ansible
   -  The s3cfg credentials to access the s3 bucket used to store the server's access log
 
+#### Docker Images
+
+The production deployment assumes the docker images are pushed to dockerhub. 
+
+As of this writing, the images are:
+graphstore_image=geneontology/go-graphstore:v1
+apache_proxy_image=geneontology/apache-proxy:v1
+
+Consult [this document](../../docker/DOCKER_README.md). to build and push images.
+You will be able to specify your newly pushed images in the steps below.
+
 #### Deploy The New Stack
 
 Note you would need to create some files and modify them as stated below. These are listed in the .gitignore file 
@@ -45,9 +56,16 @@ These 2 are needed to deploy the server using ansible.
 
 ```sh
 cd provision
-cp production/backend.tf.sample aws/backend.tf # Now modify it with the name of the s3 bucket and the aws profile if it is not default
+
+# This file is used to configure the Terraform S3 Backend.
+cp production/backend.tf.sample aws/backend.tf # Mmodify it with the name of the s3 bucket and the aws profile if it is not default
+
+# This file is used to configure the S3 credentials for the apache server logs.
 cp production/s3cfg.sample production/s3cfg    # Now populate this with the correct access/secret keys
-cp production/production-vars.txt.sample production/production-vars.txt # Modify as needed. Used to override ansible variables from vars.yaml. 
+
+# This file is used to override ansible variables from vars.yaml
+cp production/production-vars.txt.sample production/production-vars.txt # Modify as needed. Docker images ... 
+
 
 cat aws/backend.tf
 cat production/s3cfg
@@ -62,7 +80,7 @@ terraform -chdir=aws init                      # This is critical. The s3 backen
 terraform -chdir=aws workspace list            # This should list the existing workspaces.
 
 # Create a workspace. Note how we append the date to the workspace name 
-terraform -chdir=aws workspace new production-mm-dd-yy
+terraform -chdir=aws workspace new production-yy-mm-dd
 terraform -chdir=aws workspace list            # confirm the new workspace is listed and is highlighted 
 terraform -chdir=aws workspace show            # confirm this is the new workspace
 terraform -chdir=aws show                      # should show nothing since nothing has been deployed in this new workspace

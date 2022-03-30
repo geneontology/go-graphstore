@@ -12,9 +12,10 @@ branch: master
 repo_dir: '{{ stage_dir }}/go-graphstore'
 
 ######
-# go-graphstore docker image tag
+# docker images
 ######
-tag: latest
+graphstore_image: go-graphstore:latest
+apache_proxy_image: go-apacheproxy:latest
 
 ######
 # java heap size
@@ -35,7 +36,8 @@ S3_BUCKET: REPLACE_ME
 # Make sure a dns entry and points to correct ip using nslookup or dig 
 ######
 GRAPHSTORE_SERVER_NAME: graphstore.example.com
-GRAPHSTORE_SERVER_ALIAS: graphstore.example.com
+GRAPHSTORE_SERVER_ALIAS: '{{ GRAPHSTORE_SERVER_NAME }}'
+TEST_GRAPHSTORE_SERVER_ALIAS: '{{ GRAPHSTORE_SERVER_NAME }}'
 
 #
 # Change journal location accordingly

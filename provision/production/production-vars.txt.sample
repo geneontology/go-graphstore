@@ -1,7 +1,19 @@
+#######
+#
+#######
+
+graphstore_image=geneontology/go-graphstore:v1
+apache_proxy_image=geneontology/apache-proxy:v1
+
+########
+# JAVA_HEAP
+
+MEM=7G
+
 #####
 # Bucket to store apache logs.
 ####
-S3_BUCKET=REPLACE_ME
+S3_BUCKET_PREFIX=REPLACE_ME
 
 ######
 # Used to access graphstore when stack is up http://graphstore.example.com/blazegraph
@@ -9,7 +21,4 @@ S3_BUCKET=REPLACE_ME
 ######
 GRAPHSTORE_SERVER_NAME=REPLACE_ME
 GRAPHSTORE_SERVER_ALIAS=REPLACE_ME
-
-#
-#
-remote_journal_gzip=http://current.geneontology.org/products/blazegraph/blazegraph-internal.jnl.gz
+TEST_GRAPHSTORE_SERVER_ALIAS=REPLACE_ME

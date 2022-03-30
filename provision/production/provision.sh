@@ -20,9 +20,7 @@ do
   set -e
 
   if [[ $ret == 0 ]]; then
-     echo "AHA"
-  else 
-     echo "BHA"
+     break
   fi 
 
   tries=$(( $tries + 1 ))

@@ -13,7 +13,7 @@ HOST=`terraform -chdir=aws output -raw public_ip`
 
 while [ $tries -le $NUM_TRIES ]
 do
-  echo "Welcome $tries times"
+  echo "Checking ssh port: Trying $tries times"
   set +e
   nc -z -w 1 -G $HOST 22
   ret=$?

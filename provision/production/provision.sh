@@ -8,14 +8,14 @@ ls -l aws/backend.tf production/go-ssh production/go-ssh.pub production/s3cfg pr
 WORKSPACE=`terraform -chdir=aws workspace show`
 
 tries=1
-NUM_TRIES=1
+NUM_TRIES=100
+HOST=`terraform -chdir=aws output -raw public_ip`
 
 while [ $tries -le $NUM_TRIES ]
 do
   echo "Welcome $tries times"
   set +e
-  # ssh -p 2002 -i production/go-ssh ubuntu@test.geneontology.io ls -l
-  nc -z -w 1 -G 1 18.204.157.226 22
+  nc -z -w 1 -G $HOST 22
   ret=$?
   set -e
 
@@ -27,8 +27,6 @@ do
 
   tries=$(( $tries + 1 ))
 done
-
-exit 0
 
 if [ "$WORKSPACE" = "default" ]; then
    echo "default workspace should not be used. create a workspace production-yy-mm-dd or internal-yy-mm-dd"
@@ -57,7 +55,6 @@ diff -s <(ssh-keygen -l -f production/go-ssh | cut -d' ' -f2) <(ssh-keygen -l -f
 # Provision aws instance
 terraform -chdir=aws apply -auto-approve -var-file=$PROVISION_DIR/production/production-vars.tfvars
 
-HOST=`terraform -chdir=aws output -raw public_ip`
 PRIVATE_KEY=$PROVISION_DIR/production/go-ssh
 S3_CRED_FILE=$PROVISION_DIR/production/s3cfg
 STAGE_DIR=/home/ubuntu/stage_dir

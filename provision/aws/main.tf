@@ -1,32 +1,36 @@
-resource "aws_instance" "graphstore_server" {
-  ami                    = var.ami
-  instance_type          = var.instance_type
-  vpc_security_group_ids = [aws_security_group.graphstore_sg.id]
-  subnet_id              = aws_subnet.graphstore_app_stack_public_subnet.id
-  key_name               = aws_key_pair.ssh_key.key_name
-  tags                   = var.tags
-
-  ebs_block_device {
-    device_name           = "/dev/sda1"
-    delete_on_termination = true
-    tags                  = var.tags
-    volume_size           = var.disk_size
-  }
-
-  lifecycle {
-    ignore_changes = [
-      ebs_block_device,
-      tags,
-    ]
-  }
+variable "tags" {
+  type = map
+  default = { Name = "test-graphstore" }
 }
 
-resource "aws_eip" "graphstore_eip" {
-  vpc  = true
+variable "instance_type" {
+  default = "t2.large"
+}
+
+variable "disk_size" {
+  default = 100
+  description = "size of disk in Gigabytes"
+}
+
+variable "public_key_path" {
+  default = "~/.ssh/id_rsa.pub"
+}
+
+provider "aws" {
+  region = "us-east-1" 
+  shared_credentials_files = [ "~/.aws/credentials" ]
+  profile = "default"
+}
+
+module "base" {
+  source = "git::https://github.com/geneontology/devops-aws-go-instance.git?ref=v1.0"
+  instance_type = var.instance_type
+  public_key_path = var.public_key_path
   tags = var.tags
+  open_ports = [80, 22]
+  disk_size = var.disk_size
 }
 
-resource "aws_eip_association" "eip_assoc" {
-  instance_id   = aws_instance.graphstore_server.id
-  allocation_id = aws_eip.graphstore_eip.id
+output "public_ip" {
+   value                  = module.base.public_ip
 }

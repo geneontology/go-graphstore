@@ -70,7 +70,7 @@ fi
 
 EXTRAS=`cat production/production-vars.txt | grep -v "#" | tr '\n' ' '`
 EXTRAS="$EXTRAS remote_journal_gzip=$remote_journal_gzip S3_BUCKET=$S3_BUCKET"
-`
+
 ansible-playbook -e "stage_dir=$STAGE_DIR S3_CRED_FILE=$S3_CRED_FILE $EXTRAS" -u ubuntu -i "$HOST," --private-key $PRIVATE_KEY stage.yaml
 ansible-playbook -e "stage_dir=$STAGE_DIR" -u ubuntu -i "$HOST," --private-key $PRIVATE_KEY start_services.yaml
 echo "Done"

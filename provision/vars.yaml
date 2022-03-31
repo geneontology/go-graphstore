@@ -15,7 +15,7 @@ repo_dir: '{{ stage_dir }}/go-graphstore'
 # docker images
 ######
 graphstore_image: go-graphstore:latest
-apache_proxy_image: go-apacheproxy:latest
+apache_proxy_image: geneontology/apache-proxy:v1
 
 ######
 # java heap size

@@ -21,7 +21,7 @@ apache_proxy_image: geneontology/apache-proxy:v1
 # java heap size
 ######
 MEM: 3G
-QUERY_TIMEOUT: 30000
+QUERY_TIMEOUT: 60000
 
 ########
 # For logrotate to s3 bucket

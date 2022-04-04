@@ -3,6 +3,11 @@
   - vars.yaml
 
   tasks:
+  - name: ansible create stage directory
+    file:
+      path: '{{ stage_dir }}'
+      state: directory
+
   - name: Check if journal exists
     stat:
       path: '{{ stage_dir }}/blazegraph.jnl'

@@ -12,7 +12,4 @@
      force: yes
 
   - name: build go-graphstore image
-    shell: "docker build -f {{ repo_dir }}/docker/Dockerfile -t 'go-graphstore:{{ tag }}' {{ repo_dir }}"
-
-  - name: build go-apache image
-    shell: "docker build -f {{ repo_dir }}/docker/Dockerfile.proxy -t 'go-apache:{{ tag }}' {{ repo_dir }}/docker"
+    shell: "docker build -f {{ repo_dir }}/docker/Dockerfile -t '{{ graphstore_image }}' {{ repo_dir }}"

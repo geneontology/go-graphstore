@@ -74,7 +74,7 @@ docker-compose -f docker-compose.yaml up -d
 #### Other useful docker-compose commands
 
 ```
-// Tail logs of all containers amigo and apache_amigo
+// Tail logs of all containers
 docker-compose -f docker-compose.yaml logs -f  
 
 // Bring all containers and remove them

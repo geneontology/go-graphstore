@@ -57,26 +57,22 @@ cp ./production/backend.tf.sample ./aws/backend.tf # Modify it with the name of 
 
 cat ./aws/backend.tf
 
-# Initialize using s3 backend
-terraform -chdir=aws init                      # This is critical. The s3 backend must be configured correctly
-terraform -chdir=aws workspace list            # This should list the existing workspaces.
-
-# Create a workspace. Note how we append the date to the workspace name 
-terraform -chdir=aws workspace new production-yy-mm-dd
-terraform -chdir=aws workspace show            # confirm this is the new workspace
-
-# Provision
+# Deploy 
 Use Python script to deploy.
 
->git clone https://github.com/abessiari/go-provision.git
->cd go-provision
->python3 -m pip install .
->which go-provision
->cd ..
+>pip install -i https://test.pypi.org/simple/ go-deploy==0.1.0
+>go-deploy -h
 
 Copy one the config yaml file and modify as needed. For internal graphstore 
 >cp ./production/config-internal.yaml.sample ./production/config-internal.yaml
->go-provision -c production/config-internal.yaml 
+
+# We append the date to the terraform workspace name. As as example we will use internal-yy-mm-dd
+
+# Dry Run
+>go-deploy -init -c production/config-internal.yaml -w internal-yy-mm-dd -d aws -dry-run -verbose 
+
+# Deploy
+>go-deploy -init -c production/config-internal.yaml -w internal-yy-mm-dd -d aws -verbose 
 
 # What just happened?
 terraform -chdir=aws output -raw public_ip     # shows elastic ip

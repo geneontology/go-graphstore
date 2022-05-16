@@ -60,19 +60,19 @@ cat ./aws/backend.tf
 # Deploy 
 Use Python script to deploy.
 
->pip install -i https://test.pypi.org/simple/ go-deploy==0.1.0
+>pip install go-deploy==0.1.0
 >go-deploy -h
 
 Copy one the config yaml file and modify as needed. For internal graphstore 
->cp ./production/config-internal.yaml.sample ./production/config-internal.yaml
+>cp ./production/config-internal.yaml.sample config-internal.yaml
 
 # We append the date to the terraform workspace name. As as example we will use internal-yy-mm-dd
 
 # Dry Run
->go-deploy -init -c production/config-internal.yaml -w internal-yy-mm-dd -d aws -dry-run -verbose 
+>go-deploy -init -c config-internal.yaml -w internal-yy-mm-dd -d aws -dry-run -verbose 
 
 # Deploy
->go-deploy -init -c production/config-internal.yaml -w internal-yy-mm-dd -d aws -verbose 
+>go-deploy -init -c config-internal.yaml -w internal-yy-mm-dd -d aws -verbose 
 
 # What just happened?
 terraform -chdir=aws output -raw public_ip     # shows elastic ip

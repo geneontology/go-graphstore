@@ -4,20 +4,20 @@ ssh_keys:
 
 instance:
     tags:
-       Name: go-graphstore-production
+       Name: go-graphstore-internal
     instance_type: m5.large 
     disk_size: 150
 
 stack:
    vars:
       S3_CRED_FILE: /Users/SOME_USER/S3/s3cfg
-      S3_BUCKET: REPLACE_ME
+      S3_BUCKET: REPLACE_ME 
       stage_dir: /home/ubuntu/stage_dir
-      remote_journal_gzip: http://current.geneontology.org/products/blazegraph/blazegraph-internal.jnl.gz
+      remote_journal_gzip: http://current.geneontology.org/products/blazegraph/blazegraph-production.jnl.gz
       graphstore_image: geneontology/go-graphstore:v1
       apache_proxy_image: geneontology/apache-proxy:v1
       MEM: 7G
-      GRAPHSTORE_SERVER_NAME: rdf-internal.berkeleybop.io
-      GRAPHSTORE_SERVER_ALIAS: rdf-internal.berkeleybop.io
+      GRAPHSTORE_SERVER_NAME: REPLACE_ME
+      GRAPHSTORE_SERVER_ALIAS: REPLACE_ME
       TEST_GRAPHSTORE_SERVER_ALIAS: test.geneontology.io
    scripts: [ "stage.yaml", "start_services.yaml" ]

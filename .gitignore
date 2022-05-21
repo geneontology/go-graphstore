@@ -19,4 +19,8 @@ go-ssh
 go-ssh.pub
 production-vars.txt
 production-vars.tfvars
-
+internal-*.cfg
+internal-*.tfvars.json
+production-*.cfg
+production-*.tfvars.json
+config-*.yaml

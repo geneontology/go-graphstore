@@ -37,61 +37,42 @@ apache_proxy_image=geneontology/apache-proxy:v1
 Consult [this document](../../docker/DOCKER_README.md). to build and push images.
 You will be able to specify your newly pushed images in the steps below.
 
-#### Deploy The New Stack
+#### AWS CREDENTIALS/TERRAFORM BACKEND 
 
-Note you would need to create some files and modify them as stated below. These are listed in the .gitignore file 
-and so git command will not list them.
+Note you would need to create some files and modify them as stated below. 
 
-These 2 are needed to deploy a new aws instance using terraform.
 - backend.tf     
-  - Points to terraform backend
-- go-ssh.pub   
-  - Public ssh key which will get added to the authorized keys of the new instance
+  - Points to terraform backend. See production/backend.tf.sample 
 
-These 2 are needed to deploy the server using ansible.
 - s3cfg          
-  - Needed by the server to populate the s3 bucket with apache logs
-- go-ssh       
-  - Private ssh key for ansible to access the remote aws instance
+  - Credentials used by apache proxy server to upload access logs to s3 bucket. See production/s3cfg.sample
+
+#### Deploy The New Stack
 
 ```sh
 cd provision
 
 # This file is used to configure the Terraform S3 Backend.
-cp production/backend.tf.sample aws/backend.tf # Mmodify it with the name of the s3 bucket and the aws profile if it is not default
+cp ./production/backend.tf.sample ./aws/backend.tf # Modify it with the name of the s3 bucket and the aws profile if it is not default
 
-# This file is used to configure the S3 credentials for the apache server logs.
-cp production/s3cfg.sample production/s3cfg    # Now populate this with the correct access/secret keys
+cat ./aws/backend.tf
 
-# This file is used to override ansible variables from vars.yaml
-cp production/production-vars.txt.sample production/production-vars.txt # Modify as needed. Docker images ... 
+# Deploy 
+Use Python script to deploy.
 
+>pip install go-deploy==0.1.0
+>go-deploy -h
 
-cat aws/backend.tf
-cat production/s3cfg
-cat production/production-vars.txt
+Copy one the config yaml file and modify as needed. For internal graphstore 
+>cp ./production/config-internal.yaml.sample config-internal.yaml
 
-# Copy "ssh keys to the production directory production/go-ssh and production/go-ssh.pub"
-cat production/go-ssh
-cat production/go-ssh.pub
+# We append the date to the terraform workspace name. As as example we will use internal-yy-mm-dd
 
-# Initialize using s3 backend
-terraform -chdir=aws init                      # This is critical. The s3 backend must be configured correctly
-terraform -chdir=aws workspace list            # This should list the existing workspaces.
+# Dry Run
+>go-deploy -init -c config-internal.yaml -w internal-yy-mm-dd -d aws -dry-run -verbose 
 
-# Create a workspace. Note how we append the date to the workspace name 
-terraform -chdir=aws workspace new production-yy-mm-dd
-terraform -chdir=aws workspace list            # confirm the new workspace is listed and is highlighted 
-terraform -chdir=aws workspace show            # confirm this is the new workspace
-terraform -chdir=aws show                      # should show nothing since nothing has been deployed in this new workspace
-
-# Provision
-chmod +x production/provision.sh
-# You may want to change provision.sh          # for instance type, disk_size 
-./production/provision.sh
-
-# Overriden terraform variables 
-cat production/production-vars.tfvars          # tags, disk_size, instance type
+# Deploy
+>go-deploy -init -c config-internal.yaml -w internal-yy-mm-dd -d aws -verbose 
 
 # What just happened?
 terraform -chdir=aws output -raw public_ip     # shows elastic ip

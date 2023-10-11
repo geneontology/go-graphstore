@@ -10,6 +10,11 @@ services:
     volumes:
       - {{ stage_dir }}/blazegraph.jnl:/app/blazegraph.jnl
       - {{ stage_dir }}/readonly_cors.xml:/app/conf/readonly_cors.xml
+    healthcheck:
+       test: wget --no-verbose --timeout=5 --tries=5 --spider http://graphstore:8899|| kill 1
+       interval: 60s
+       retries: 1
+       start_period: 30s
     restart: unless-stopped
 
   apache_graphstore:
@@ -21,12 +26,20 @@ services:
       - USE_S3={{ USE_S3 }}
       - S3_PATH={{ S3_PATH }}
       - S3_BUCKET={{ S3_BUCKET }}
+      - USE_SSL={{ USE_SSL }}
+      - S3_SSL_CERTS_LOCATION={{ S3_SSL_CERTS_LOCATION }}
+      - USE_CLOUDFLARE={{ USE_CLOUDFLARE }}
+    init: true
     restart: unless-stopped
     volumes:
-      - {{ stage_dir }}/proxy-configs/s3cfg:/opt/credentials/s3cfg
-      - {{ stage_dir }}/proxy-configs/httpd-vhosts-graphstore.conf:/etc/apache2/sites-enabled/httpd-vhosts-graphstore.conf
-      - {{ stage_dir }}/apache_proxy_logs:/var/log/apache2
+      - {{ stage_dir }}/httpd-confs:/etc/apache2/sites-enabled
+      - {{ stage_dir }}/qos.conf:/etc/apache2/mods-enabled/qos.conf
+      - {{ stage_dir }}/robots.txt:/var/www/html/robots.txt
+      - {{ stage_dir }}/apache_logs:/var/log/apache2
+      - {{ stage_dir }}/credentials:/opt/credentials
+      - {{ stage_dir }}/credentials/s3cfg:/root/.aws/config
     ports:
       - "80:80"
+      - "443:443"
     depends_on:
       - graphstore

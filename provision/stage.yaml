@@ -1,6 +1,8 @@
 - hosts: all
   vars_files:
   - vars.yaml
+  - ssl-vars.yaml
+  - qos-vars.yaml
 
   tasks:
   - name: ansible create stage directory
@@ -28,10 +30,16 @@
     args:
       executable: /bin/bash
 
-  - name: Create proxy-configs directory
+  - name: Create httpd-confs directory
     file:
-      path: '{{ stage_dir }}/proxy-configs'
+      path: '{{ stage_dir }}/httpd-confs'
       state: directory 
+
+  - name: Create httpd-confs directory
+    file:
+      path: '{{ stage_dir }}/credentials'
+      state: directory 
+
 
   - name: install docker-compose, http configs, ...
     template:
@@ -39,18 +47,46 @@
       dest: '{{ stage_dir }}{{ item.dir }}/{{ item.file }}'
     with_items:
       - { file: 'docker-compose.yaml', dir: '/' }
+      - { file: 'httpd-vhosts-graphstore.conf', dir: '/httpd-confs' }
+      - { file: 'httpd-vhosts-graphstore-ssl.conf', dir: '/httpd-confs' }
       - { file: 'readonly_cors.xml', dir: '/' }
-      - { file: 'httpd-vhosts-graphstore.conf', dir: '/proxy-configs' }
+
+  - name: install qos config from templates directory
+    template:
+      src: qos.conf
+      dest: '{{ stage_dir }}/qos.conf'
+    when: USE_QOS | bool
+
+  - name: copy noop qos.conf
+    copy:
+      src: "files/qos-noop.conf"
+      dest: '{{ stage_dir }}/qos.conf'
+    when: not USE_QOS | bool
+
+  - name: copy readonly_cors.xml 
+    copy:
+      src: "files/{{ item.file }}"
+      dest: '{{ stage_dir }}{{ item.dir }}/{{ item.file }}'
+    with_items:
+      - { file: 'robots.txt', dir: '/' }
+
+  - name: install https configs, ...
+    template:
+      src: 'templates/{{ item.file }}'
+      dest: '{{ stage_dir }}{{ item.dir }}/{{ item.file }}'
+    with_items:
+      - { file: 'httpd-vhosts-graphstore-ssl.conf', dir: '/httpd-confs' }
+    when: USE_SSL | bool
 
   - name: s3cfg is unused delete it 
     file:
-      path: "{{ stage_dir }}/proxy-configs/s3cfg"
+      path: "{{ stage_dir }}/credentials/s3cfg"
       state: absent
     when: not USE_S3 | bool
 
-  - name: copy s3cfg is unused delete it 
+  - name: copy s3cfg
     copy:
       src: "{{ S3_CRED_FILE }}"
-      dest: "{{ stage_dir }}/proxy-configs/s3cfg"
+      dest: "{{ stage_dir }}/credentials/s3cfg"
     when: USE_S3 | bool
 

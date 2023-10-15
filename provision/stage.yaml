@@ -17,18 +17,41 @@
       get_md5: False
     register: journal_result
 
-  - name: Get remote blazegraph
+  - name: Get remote blazegraph journal
     get_url:
       url: "{{ remote_journal_gzip }}"
       dest: "/{{ stage_dir }}/blazegraph.jnl.gz"
-      timeout: 1000
+    async: 9000
+    poll: 0
+    register: get_journal
+    when: not journal_result.stat.exists
+
+  - name: Check on async get_journal task
+    async_status:
+      jid: "{{ get_journal.ansible_job_id }}"
+    register: job_result
+    until: job_result.finished
+    retries: 45 
+    delay: 20 
     when: not journal_result.stat.exists
 
   - name: Unpack the journal
     shell: unpigz "/{{ stage_dir }}/blazegraph.jnl.gz" || gunzip "/{{ stage_dir }}/blazegraph.jnl.gz"
-    when: not journal_result.stat.exists
     args:
       executable: /bin/bash
+    async: 9000
+    register: unpack_journal
+    poll: 0
+    when: not journal_result.stat.exists
+
+  - name: Check on async unpack_journal task
+    async_status:
+      jid: "{{ unpack_journal.ansible_job_id }}"
+    register: job_result
+    until: job_result.finished
+    retries: 45 
+    delay: 20 
+    when: not journal_result.stat.exists
 
   - name: Create httpd-confs directory
     file:

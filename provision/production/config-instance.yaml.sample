@@ -1,0 +1,16 @@
+ssh_keys:
+     public: /tmp/go-ssh.pub
+     private: /tmp/go-ssh
+
+instance:
+    tags:
+       Name: REPLACE_ME  # possible values: go-graphstore-production or go-graphstore-internal
+    instance_type: m5.large 
+    disk_size: 150
+    dns_record_name: "REPLACE_ME"
+    dns_zone_id: "REPLACE_ME"
+
+    open_ports:
+       - 80
+       - 22
+       - 443

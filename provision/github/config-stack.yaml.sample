@@ -1,0 +1,27 @@
+ssh_keys:
+     public: /tmp/go-ssh.pub
+     private: /tmp/go-ssh
+
+stack:
+   vars:
+      stage_dir: /home/ubuntu/stage_dir
+      S3_CRED_FILE: /tmp/go-aws-credentials
+      S3_BUCKET: NOT_NEEDED_FOR_THIS_TEST  # apache logs
+      apache_proxy_image: geneontology/apache-proxy:v6
+
+      USE_SSL: 1
+      S3_SSL_CERTS_LOCATION: REPLACE_ME_WITH_URI
+
+      USE_QOS: 1
+      QS_ClientEventBlockCount: 350
+      QS_ClientEventBlockCountSeconds: 100
+      QS_ClientEventBlockExcludeIP: "9.9.9.9"
+
+      remote_journal_gzip: http://current.geneontology.org/products/blazegraph/blazegraph-production.jnl.gz
+      graphstore_image: geneontology/go-graphstore:v1
+      MEM: 7G
+      GRAPHSTORE_SERVER_NAME: REPLACE_ME_WITH_RECORD_NAME
+      GRAPHSTORE_SERVER_ALIAS: REPLACE_ME_WITH_PRODUCTION_FQDN
+
+      USE_CLOUDFLARE: 0
+   scripts: [ "stage.yaml", "start_services.yaml" ]

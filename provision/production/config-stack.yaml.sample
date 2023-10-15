@@ -1,0 +1,34 @@
+ssh_keys:
+     public: /tmp/go-ssh.pub
+     private: /tmp/go-ssh
+
+stack:
+   vars:
+      S3_CRED_FILE: /tmp/go-aws-credentials
+      S3_BUCKET: REPLACE_ME
+
+      apache_proxy_image: geneontology/apache-proxy:v6
+
+      USE_SSL: 1
+      S3_SSL_CERTS_LOCATION: s3://go-service-lockbox/geneontology.org.tar.gz
+
+      # APACHE PROXY USE QOS module. Recommended for PRODUCTION
+      USE_QOS: 1
+      QS_ClientEventBlockCount: 350
+      QS_ClientEventBlockCountSeconds: 100
+      QS_ClientEventBlockExcludeIP: "9.9.9.9"
+
+      stage_dir: /home/ubuntu/stage_dir
+
+      # http://current.geneontology.org/products/blazegraph/blazegraph-production.jnl.gz
+      # http://current.geneontology.org/products/blazegraph/blazegraph-internal.jnl.gz
+      remote_journal_gzip: REPLACE_ME # Possible values are right above
+
+      graphstore_image: geneontology/go-graphstore:v1
+      MEM: 7G
+      GRAPHSTORE_SERVER_NAME: REPLACE_ME # aes-test-graphstore.geneontology.org
+      GRAPHSTORE_SERVER_ALIAS: REPLACE_ME # rdf.geneontology.org or rdf-internal.geneontology.org
+
+      USE_CLOUDFLARE: 0  # Enable if planning to use behind proxy
+   scripts: [ "stage.yaml", "start_services.yaml" ]
+

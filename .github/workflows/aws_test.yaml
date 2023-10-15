@@ -3,10 +3,10 @@ name: AWS Test Using Go Deploy
 on:
   push:
     branches:
-      - main 
+      - master
   pull_request:
     branches:
-      - main 
+      - master
   workflow_dispatch:
 
 env:

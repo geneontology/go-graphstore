@@ -9,18 +9,16 @@ ls -l /tmp
 
 zone_id=`aws route53 list-hosted-zones-by-name --dns-name geneontology.io. --max-items 1  --query "HostedZones[].Id" --output text  | tr "/" " " | awk '{ print $2 }'`
 record_name=cicd-test-go-graphstore.geneontology.io
-aws route53 list-resource-record-sets --hosted-zone-id $zone_id  --max-items 1000 --query "ResourceRecordSets[].Name" | grep $record_name 
+aws route53 list-resource-record-sets --hosted-zone-id $zone_id --max-items 1000 --query "ResourceRecordSets[].Name" | grep $record_name 
 ret=$?
 
 if [ "${ret}" == 0 ]
 then
-   echo "$record_name exists. Cannot proceed. Tray again"
+   echo "$record_name exists. Cannot proceed. Try again later."
    exit 1
 fi
 
 echo "Great. $record_name not found ... Proceeeding"
-exit $ret 
-
 # Prepare TF backend
 
 s3_terraform_backend=$S3_TF_BACKEND

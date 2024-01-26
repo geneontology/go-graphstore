@@ -25,6 +25,7 @@ services:
     environment:
       - USE_S3={{ USE_S3 }}
       - S3_PATH={{ S3_PATH }}
+      - S3_PREFIX={{ S3_PREFIX }}
       - S3_BUCKET={{ S3_BUCKET }}
       - USE_SSL={{ USE_SSL }}
       - S3_SSL_CERTS_LOCATION={{ S3_SSL_CERTS_LOCATION }}

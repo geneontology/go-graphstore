@@ -30,7 +30,7 @@ Key points:
 - Raw `terraform` commands are for lower-level debugging only.
 - Two deployment tracks: **production** (geneontology.org) and **internal** (berkeleybop.io).
 - Workspace naming convention: `production-YYYY-MM-DD` or `internal-YYYY-MM-DD`.
-- Config files use `REPLACE_ME` placeholders. Always scan for remaining placeholders before deploying: `grep -rn 'REPLACE_ME\|YYYY-MM-DD' config-stack.yaml config-instance.yaml ssl-vars.yaml vars.yaml aws/backend.tf`
+- Config sample files use unique `REPLACE_ME_*` placeholders (e.g. `REPLACE_ME_S3_STATE_BUCKET`, `REPLACE_ME_DNS_ZONE_ID`). Each placeholder is self-documenting. Always scan for remaining placeholders before deploying: `grep -rn 'REPLACE_ME_' config-stack.yaml config-instance.yaml ssl-vars.yaml vars.yaml aws/backend.tf`
 
 ## Related repositories
 
@@ -55,3 +55,5 @@ CI runs on push to master via `.github/workflows/aws_test.yaml` — provisions a
 - Docker container name for devops work: `go-graphstore`.
 - Credentials and SSH keys go in `/tmp/` inside the devops container (see README.setup.md).
 - Never commit credentials, SSH keys, or `backend.tf` files (covered by `.gitignore`).
+- **When generating deployment commands, always read the actual sample files** (e.g. `production/backend.tf.sample`, `production/config-instance.yaml.sample`, `production/config-stack.yaml.sample`) to determine exact placeholder names and file structure. Do not rely on documentation alone — the docs may use different placeholder names than the files. The sample files are the source of truth.
+- The `config-stack.yaml` (from `config-stack.yaml.sample`) bundles overrides for SSL, S3, and other vars — when it is used, editing `vars.yaml` and `ssl-vars.yaml` separately is not needed for values already present in the stack config.

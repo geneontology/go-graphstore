@@ -1,6 +1,6 @@
 terraform {
   backend "s3" {
-    bucket  = "REPLACE_ME"
+    bucket  = "REPLACE_ME_S3_STATE_BUCKET"
     profile = "default"
     key     = "graphstore/terraform.tfstate"
     region  = "us-east-1"

@@ -28,9 +28,9 @@ QUERY_TIMEOUT: 60000
 #######`
 USE_S3: 1
 S3_PATH: graphstore 
-S3_PREFIX: REPLACE_ME
-S3_CRED_FILE: REPLACE_ME
-S3_BUCKET: REPLACE_ME
+S3_PREFIX: REPLACE_ME_S3_PREFIX
+S3_CRED_FILE: REPLACE_ME_S3_CRED_FILE
+S3_BUCKET: REPLACE_ME_S3_BUCKET
 
 ######
 # Used to access graphstore when stack is up http://graphstore.example.com/blazegraph

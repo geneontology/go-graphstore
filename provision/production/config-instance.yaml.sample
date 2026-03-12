@@ -4,11 +4,11 @@ ssh_keys:
 
 instance:
     tags:
-       Name: REPLACE_ME  # possible values: go-graphstore-production or go-graphstore-internal
-    instance_type: m5.large 
+       Name: REPLACE_ME_INSTANCE_NAME  # possible values: graphstore-production-YYYY-MM-DD or graphstore-internal-YYYY-MM-DD
+    instance_type: m5.large
     disk_size: 150
-    dns_record_name: "REPLACE_ME"
-    dns_zone_id: "REPLACE_ME"
+    dns_record_name: "REPLACE_ME_DNS_RECORD_NAME"
+    dns_zone_id: "REPLACE_ME_DNS_ZONE_ID"
 
     open_ports:
        - 80

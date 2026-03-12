@@ -4,6 +4,12 @@
   - vars.yaml
 
   tasks:
+  - name: Update system packages
+    apt:
+      update_cache: yes
+      upgrade: safe
+    become: yes
+
   - name: Checkout repos
     git:
      repo: '{{ repo }}'

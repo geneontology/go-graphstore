@@ -57,3 +57,9 @@ CI runs on push to master via `.github/workflows/aws_test.yaml` — provisions a
 - Never commit credentials, SSH keys, or `backend.tf` files (covered by `.gitignore`).
 - **When generating deployment commands, always read the actual sample files** (e.g. `production/backend.tf.sample`, `production/config-instance.yaml.sample`, `production/config-stack.yaml.sample`) to determine exact placeholder names and file structure. Do not rely on documentation alone — the docs may use different placeholder names than the files. The sample files are the source of truth.
 - The `config-stack.yaml` (from `config-stack.yaml.sample`) bundles overrides for SSL, S3, and other vars — when it is used, editing `vars.yaml` and `ssl-vars.yaml` separately is not needed for values already present in the stack config.
+- **When generating command lists for the user**, clearly distinguish between commands that can be copy-pasted verbatim and those that require user-specific values. Specifically:
+  - The path to the AWS credentials file on the host machine is user-specific — always ask or confirm.
+  - The path to SSH keys on the host machine is user-specific — always ask or confirm.
+  - The `docker cp` commands for copying credentials into the container require the user's host paths.
+  - The environment exports (`AWS_SHARED_CREDENTIALS_FILE`, `AWS_REGION`, `ANSIBLE_HOST_KEY_CHECKING`) must appear before any commands that depend on them — do not assume they carry over from a previous step description.
+  - All other commands (sed substitutions, go-deploy, grep checks) can be copy-pasted verbatim once the date and track are known.

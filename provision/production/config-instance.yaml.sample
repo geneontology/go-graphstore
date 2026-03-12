@@ -4,7 +4,8 @@ ssh_keys:
 
 instance:
     tags:
-       Name: REPLACE_ME_INSTANCE_NAME  # possible values: graphstore-production-YYYY-MM-DD or graphstore-internal-YYYY-MM-DD
+       # possible values: graphstore-production-YYYY-MM-DD or graphstore-internal-YYYY-MM-DD
+       Name: REPLACE_ME_INSTANCE_NAME
     instance_type: m5.large
     disk_size: 150
     dns_record_name: "REPLACE_ME_DNS_RECORD_NAME"

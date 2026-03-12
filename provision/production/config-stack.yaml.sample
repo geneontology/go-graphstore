@@ -23,12 +23,14 @@ stack:
 
       # http://current.geneontology.org/products/blazegraph/blazegraph-production.jnl.gz
       # http://current.geneontology.org/products/blazegraph/blazegraph-internal.jnl.gz
-      remote_journal_gzip: REPLACE_ME_JOURNAL_URL # Possible values are right above
+      remote_journal_gzip: REPLACE_ME_JOURNAL_URL
 
       graphstore_image: geneontology/go-graphstore:v1
       MEM: 7G
-      GRAPHSTORE_SERVER_NAME: REPLACE_ME_SERVER_NAME # e.g. rdf.geneontology.org or rdf-internal.berkeleybop.io
-      GRAPHSTORE_SERVER_ALIAS: REPLACE_ME_SERVER_ALIAS # e.g. graphstore-production-YYYY-MM-DD.geneontology.org
+      # e.g. rdf.geneontology.org or rdf-internal.berkeleybop.io
+      GRAPHSTORE_SERVER_NAME: REPLACE_ME_SERVER_NAME
+      # e.g. graphstore-production-YYYY-MM-DD.geneontology.org
+      GRAPHSTORE_SERVER_ALIAS: REPLACE_ME_SERVER_ALIAS
 
       USE_CLOUDFLARE: 0  # Enable if planning to use behind proxy
    scripts: [ "stage.yaml", "start_services.yaml" ]

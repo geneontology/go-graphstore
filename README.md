@@ -1,16 +1,17 @@
-[![Build Status](https://travis-ci.org/cmungall/go-graphstore.svg?branch=master)](https://travis-ci.org/cmungall/go-graphstore)
 [![DOI](https://zenodo.org/badge/13996/cmungall/go-graphstore.svg)](https://zenodo.org/badge/latestdoi/13996/cmungall/go-graphstore)
 
-This repository contains code and configuration for building the GO
-graphstore, as well as documentation on how to query it.
+This repository contains code and configuration for the Gene Ontology's
+Blazegraph SPARQL endpoint service (`rdf.geneontology.org`). It packages
+Blazegraph into a Docker container behind an Apache reverse proxy and
+deploys to AWS EC2 instances using Terraform and Ansible.
 
-It is executed by this Jenkins job: https://build.berkeleybop.org/job/build-go-rdfstore
+## Deployment
 
-This deposits the blazegraph dump here: http://build-artifacts.berkeleybop.org/build-go-rdfstore/latest/blazegraph.jnl
+Canonical deployment and operations documentation lives at:
+**[devops-documentation / README.graphstore.md](https://github.com/geneontology/devops-documentation/blob/main/README.graphstore.md)**
 
-Warning: this is experimental and the dump is not guaranteed to be
-either complete or up to date. To build the graph for yourself, follow
-the instructions below.
+General devops environment setup (credentials, AWS, SSH keys) is at:
+[devops-documentation / README.setup.md](https://github.com/geneontology/devops-documentation/blob/main/README.setup.md)
 
 # Building the graph store
 

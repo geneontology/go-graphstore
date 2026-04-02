@@ -30,6 +30,13 @@ Key points:
 - Raw `terraform` commands are for lower-level debugging only.
 - Two deployment tracks: **production** (geneontology.org) and **internal** (berkeleybop.io).
 - Workspace naming convention: `production-YYYY-MM-DD` or `internal-YYYY-MM-DD`.
+- **`go-deploy` CLI flags** (verify with `go-deploy --help` if in doubt):
+  - `-d <dir>` / `--working-directory <dir>` — Terraform working directory (typically `aws`).
+  - `-w <name>` / `--workspace <name>` — Terraform workspace; creates it automatically if it doesn't exist.
+  - `-c <file>` / `--conf <file>` — YAML config file (`config-instance.yaml` to provision the instance, `config-stack.yaml` to deploy the stack).
+  - `-init` — Initialize Terraform backend.
+  - `-show`, `-output`, `-list-workspaces`, `-destroy`, `-dry-run`, `-verbose` — Other operations.
+  - There are **no** `-deploy`, `-deploy-stack`, or `-create-workspace` flags. Provisioning and stack deployment are both done via `-c` with the appropriate config file.
 - Config sample files use unique `REPLACE_ME_*` placeholders (e.g. `REPLACE_ME_S3_STATE_BUCKET`, `REPLACE_ME_DNS_ZONE_ID`). Each placeholder is self-documenting. Always scan for remaining placeholders before deploying: `grep -rn 'REPLACE_ME_' config-stack.yaml config-instance.yaml ssl-vars.yaml vars.yaml aws/backend.tf`
 
 ## Related repositories

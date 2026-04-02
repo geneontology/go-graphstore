@@ -37,6 +37,7 @@ Key points:
   - `-init` — Initialize Terraform backend.
   - `-show`, `-output`, `-list-workspaces`, `-destroy`, `-dry-run`, `-verbose` — Other operations.
   - There are **no** `-deploy`, `-deploy-stack`, or `-create-workspace` flags. Provisioning and stack deployment are both done via `-c` with the appropriate config file.
+- **Hot backup policy**: Always keep one previous production instance running as a hot backup when deploying a new one. Only destroy instances older than the immediately previous one.
 - Config sample files use unique `REPLACE_ME_*` placeholders (e.g. `REPLACE_ME_S3_STATE_BUCKET`, `REPLACE_ME_DNS_ZONE_ID`). Each placeholder is self-documenting. Always scan for remaining placeholders before deploying: `grep -rn 'REPLACE_ME_' config-stack.yaml config-instance.yaml ssl-vars.yaml vars.yaml aws/backend.tf`
 
 ## Related repositories

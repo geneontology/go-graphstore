@@ -6,6 +6,11 @@ go-graphstore is the Gene Ontology's Blazegraph SPARQL endpoint service. It pack
 
 The service runs at `rdf.geneontology.org` (production) and `rdf-internal.berkeleybop.io` (internal).
 
+> **Status:** This repository is being retired and its information/devops are to be
+> ported into the GO **main operations repo**. See [`PORTING_NOTES.md`](PORTING_NOTES.md)
+> for the operational reality and lessons learned that the sample files and canonical
+> docs do not fully capture — written to aid that (possibly automated) port.
+
 ## Repository structure
 
 - `docker/Dockerfile` — Multi-stage build: Maven/OpenJDK 8 builder, openjdk:8-jre runtime. Exposes port 8899.
@@ -19,6 +24,7 @@ The service runs at `rdf.geneontology.org` (production) and `rdf-internal.berkel
 - `pom.xml` — Maven project: blazegraph-jar 2.1.4, jetty-servlets 9.2.3.
 - `Makefile` — Local build and Blazegraph loading targets.
 - `.github/workflows/aws_test.yaml` — CI/CD: provisions a test instance on push to master.
+- `PORTING_NOTES.md` — Operational lessons learned and porting notes (deploy reality, known gotchas, concrete production values, teardown safety).
 
 ## Deployment
 
@@ -39,6 +45,29 @@ Key points:
   - There are **no** `-deploy`, `-deploy-stack`, or `-create-workspace` flags. Provisioning and stack deployment are both done via `-c` with the appropriate config file.
 - **Hot backup policy**: Always keep one previous production instance running as a hot backup when deploying a new one. Only destroy instances older than the immediately previous one.
 - Config sample files use unique `REPLACE_ME_*` placeholders (e.g. `REPLACE_ME_S3_STATE_BUCKET`, `REPLACE_ME_DNS_ZONE_ID`). Each placeholder is self-documenting. Always scan for remaining placeholders before deploying: `grep -rn 'REPLACE_ME_' config-stack.yaml config-instance.yaml ssl-vars.yaml vars.yaml aws/backend.tf`
+
+## Known gotchas (full detail in `PORTING_NOTES.md`)
+
+- **Production cutover is at Cloudflare, not Route53.** `rdf.geneontology.org` is a
+  CNAME to Cloudflare; terraform/`go-deploy` only manage the per-instance dated record
+  (`graphstore-production-YYYY-MM-DD.geneontology.org`). Going live = changing the
+  Cloudflare origin, a step outside this repo. Verify a cutover by sending a marked
+  request through `rdf` and grepping the instance's
+  `stage_dir/apache_logs/graphstore-access.log` for it.
+- **`get_url` stalls large-journal deploys.** The journal downloads fine, but
+  `get_url`'s post-download checksum on the ~9 GB file exceeds the playbook's 15-min
+  `async_status` window and fails the play. The EBS volume is *not* the problem
+  (~100 MB/s verified). Rescue: preserve the completed download, unpack it manually to
+  `<stage_dir>/blazegraph.jnl`, and re-run — `stage.yaml` skips download/unpack when
+  that file exists.
+- **Ansible version drift.** The devops image ships `ansible-core 2.16.3`, which
+  removed the `stat` module's `get_md5` param; this broke `stage.yaml` until fixed
+  (PR #37). Audit playbooks for other removed params during the port.
+- **`go-deploy -destroy` deletes the workspace too**, and only touches that
+  workspace's own resources. Prove isolation first with
+  `terraform -chdir=aws workspace select <ws> && terraform -chdir=aws plan -destroy`
+  (expect `0 to add, 0 to change, 6 to destroy`; all `main.tf` vars have defaults so no
+  tfvars file is needed).
 
 ## Related repositories
 
